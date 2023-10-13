@@ -1,3 +1,5 @@
+# testassessment
+A React application that interfaces with the JSONPlaceholder API to facilitate Create, Read, Update, and Delete (CRUD) operations on posts. 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
