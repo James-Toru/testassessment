@@ -1,61 +1,17 @@
-"use client";
-import { useEffect, useState } from "react";
-import { getAllPosts, createPost } from "./api";
 import Link from "next/link";
 
-
-function Home() {
-  const [posts, setPosts] = useState([]);
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getAllPosts();
-      setPosts(data);
-    }
-    fetchData();
-  }, []);
-
-  const handleCreatePost = async () => {
-    const newPost = await createPost({ title, body });
-    setPosts([...posts, newPost]);
-    setTitle('');
-    setBody('');
-  };
-
+export default function Home() {
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <h2>Create A Post</h2>
-      </div>
-      <div className="mb-4 flex flex-col">
-        <input 
-          value={title} 
-          onChange={(e) => setTitle(e.target.value)} 
-          placeholder="Title" 
-          className="p-2 border rounded text-black"
-        />
-        <textarea 
-          value={body} 
-          onChange={(e) => setBody(e.target.value)} 
-          placeholder="Body" 
-          className="p-2 border rounded mt-2 text-black"
-        />
-        <button onClick={handleCreatePost} className="p-2 bg-blue-500 text-white mt-2 rounded">Create Post</button>
-      </div>
-
-      {posts.map(post => (
-        <div key={post.id} className="border p-4 mb-2 rounded">
-          <h2 className="text-xl mb-2">{post.title}</h2>
-          <p className="p-2">{post.body}</p>
-          <Link href={`/post/${post.id}`}>
-            View
+    <main>
+      <div className="flex flex-col justify-center items-center text-center">
+        <h1 className="text-gray-200 text-8xl p-10">Welcome to <span className="text-primary">AnyPost!</span></h1>
+        <h2 className="text-gray-200 text-3xl p-7">
+        A <span className="text-primary">React/NextJS</span>application that interfaces with the <span className="text-primary"> JSONPlaceholder API</span> to facilitate Create, Read, Update, and Delete &#40;<span className="text-primary">CRUD</span>&#41; operations on posts.
+        </h2>
+        <Link className="border border-primary bg-primary p-4 mt-5 rounded hover:bg-transparent hover:border hover:border-primary hover:text-primary" href="/create">
+          Post Something
         </Link>
-        </div>
-      ))}
-    </div>
-  );
+      </div>
+    </main>
+  )
 }
-
-export default Home;
