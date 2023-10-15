@@ -20,7 +20,6 @@ function Post({ params }) {
 
     useEffect(() => {
         const foundPost = posts.find(p => p.id == id);
-        console.log(foundPost)
         if (foundPost) {
             setPost(foundPost);
             setTitle(foundPost.title);
@@ -44,6 +43,7 @@ function Post({ params }) {
         setPosts(updatedPosts);
     // Update local state
         setPost(updatedPost);
+        sessionStorage.setItem("posts", JSON.stringify(updatedPosts));
         setEditing(false);
         showNotification('Post updated successfully!');
     };
@@ -51,7 +51,8 @@ function Post({ params }) {
     const handleDeletePost = async () => {
         const filteredPosts = posts.filter(p => p.id != id);
         setPosts(filteredPosts);
-        showNotification('Post updated successfully!');
+        sessionStorage.setItem("posts", JSON.stringify(filteredPosts));
+        showNotification('Post deleted successfully!');
         setTimeout(() => {
             router.push('/create'); // Redirect to create after a 2-second delay
         }, 2000);

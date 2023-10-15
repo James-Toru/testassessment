@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useData } from "../contexts/Datacontexts";
 import { getAllPosts, createPost } from "../api";
 import Link from "next/link";
@@ -20,6 +20,11 @@ function CreatePost() {
     setNotification(message);
   };
 
+  useEffect(() => {
+    const savedPosts = sessionStorage.getItem("posts");
+    setPosts(JSON.parse(savedPosts));
+  }, []);
+
   const validateForm = () => {
     let errors = {};
     if (!title.trim()) errors.title = "Title is required.";
@@ -36,6 +41,7 @@ function CreatePost() {
     const maxCurrentId = Math.max(...posts.map(p => p.id));
     newPost.id = maxCurrentId + 1;
     setPosts([...posts, newPost]);
+    sessionStorage.setItem("posts", JSON.stringify([...posts, newPost]));
     setTitle('');
     setBody('');
     showNotification('Post created successfully!');

@@ -9,9 +9,17 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchData() {
+    // Try to load posts from sessionStorage
+    const savedPosts = sessionStorage.getItem("posts");
+    if (savedPosts) {
+      setPosts(JSON.parse(savedPosts));
+    } else {
       const data = await getAllPosts();
       setPosts(data);
-    }
+      // Save the posts to sessionStorage for future use in this session
+      sessionStorage.setItem("posts", JSON.stringify(data));
+      }
+    } 
     fetchData();
   }, []);
 

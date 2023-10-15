@@ -1,10 +1,15 @@
 "use client";
-
 import { useData } from "@/app/contexts/Datacontexts";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Post() {
-        const { posts = [] } = useData();
+    const { posts, setPosts } = useData();
+
+    useEffect(() => {
+        const savedPosts = sessionStorage.getItem("posts");
+        setPosts(JSON.parse(savedPosts));
+    }, []);
 
         if (!posts) return <div className="flex justify-center items-center text-primary"><h1>Loading...</h1></div>;
 
