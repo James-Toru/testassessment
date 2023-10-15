@@ -4,10 +4,10 @@ import { createContext, useState, useContext } from "react";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-  const [createdPosts, setCreatedPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   return (
-    <DataContext.Provider value={{ createdPosts, setCreatedPosts }}>
+    <DataContext.Provider value={{ posts, setPosts }}>
       {children}
     </DataContext.Provider>
   );

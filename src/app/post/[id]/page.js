@@ -11,62 +11,50 @@ function Post({ params }) {
     const router = useRouter();
     const id = params.id
 
-    // Get post from router state if available
-    const initialState = params.post || null;
-    const { createdPosts, setCreatedPosts } = useData();
-    const [post, setPost] = useState(initialState);
+    const { posts, setPosts } = useData();
+    const [post, setPost] = useState(null);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [editing, setEditing] = useState(false);
     const [notification, setNotification] = useState(null);
 
     useEffect(() => {
-        const foundPost = createdPosts.find(p => p.id == id);
+        const foundPost = posts.find(p => p.id == id);
         console.log(foundPost)
         if (foundPost) {
             setPost(foundPost);
             setTitle(foundPost.title);
             setBody(foundPost.body)
-        } else {
-            async function fetchData() {
-                const data = await getPostById(id);
-                setPost(data);
-                setTitle(data.title);
-                setBody(data.body);
-            }
-            fetchData();
-        }
-    }, [id, createdPosts]);
+        } 
+    }, [id, posts]);
 
     const showNotification = (message) => {
         setNotification(message);
       };
 
     const handleUpdatePost = async () => {
-        const postIndex = createdPosts.findIndex(p => p.id == id);
-        if (postIndex !== -1) {
-            const updatedPost = {
-                ...createdPosts[postIndex],
-                title,
-                body
-            };
-            const updatedCreatedPosts = [...createdPosts];
-            updatedCreatedPosts[postIndex] = updatedPost;
-            setCreatedPosts(updatedCreatedPosts);
-            setPost(updatedPost);
-            setEditing(false);
-        }else{
-            const updatedPost = await updatePost(id, { title, body });
-            setPost(updatedPost);
-            setEditing(false);
-        }
+    // Update the post in the context
+        const updatedPost = {
+            ...post,
+            title,
+            body
+        };
+  
+        const updatedPosts = posts.map(p => p.id == id ? updatedPost : p);
+        setPosts(updatedPosts);
+    // Update local state
+        setPost(updatedPost);
+        setEditing(false);
         showNotification('Post updated successfully!');
     };
 
     const handleDeletePost = async () => {
-        await deletePost(id);
+        const filteredPosts = posts.filter(p => p.id != id);
+        setPosts(filteredPosts);
         showNotification('Post updated successfully!');
-        router.push('/'); // Redirect to home after delete
+        setTimeout(() => {
+            router.push('/create'); // Redirect to create after a 2-second delay
+        }, 2000);
     };
 
     if (!post) return <div className="flex justify-center items-center text-primary"><h1 className="text-center">Loading...</h1></div>;

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useData } from "../contexts/Datacontexts";
 import { getAllPosts, createPost } from "../api";
 import Link from "next/link";
@@ -10,20 +10,11 @@ import Form from "./Form";
 
 
 function CreatePost() {
-  const [posts, setPosts] = useState([]);
-  const { createdPosts = [], setCreatedPosts = () => {} } = useData();
+  const { posts, setPosts } = useData();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [notification, setNotification] = useState(null);
   const [formErrors, setFormErrors] = useState({});
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getAllPosts();
-      setPosts(data);
-    }
-    fetchData();
-  }, []);
 
   const showNotification = (message) => {
     setNotification(message);
@@ -41,12 +32,16 @@ function CreatePost() {
   const handleCreatePost = async () => {
     if (!validateForm()) return;
     const newPost = await createPost({ title, body });
-    setCreatedPosts([newPost]);
+    // Assign a new unique ID to the post
+    const maxCurrentId = Math.max(...posts.map(p => p.id));
+    newPost.id = maxCurrentId + 1;
     setPosts([...posts, newPost]);
     setTitle('');
     setBody('');
     showNotification('Post created successfully!');
   };
+
+  console.log(posts)
 
   return (
     <main>

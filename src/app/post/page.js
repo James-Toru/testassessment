@@ -1,18 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import { getAllPosts } from "../api";
+
+import { useData } from "@/app/contexts/Datacontexts";
 import Link from "next/link";
 
 export default function Post() {
-        const [posts, setPosts] = useState([]);
-
-        useEffect(() => {
-            async function fetchData() {
-            const data = await getAllPosts();
-            setPosts(data);
-            }
-            fetchData();
-        }, []);
+        const { posts = [] } = useData();
 
         if (!posts) return <div className="flex justify-center items-center text-primary"><h1>Loading...</h1></div>;
 
