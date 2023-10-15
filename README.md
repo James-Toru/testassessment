@@ -30,7 +30,15 @@ AnyPost has the following features:
 ```bash
     npm install
 ```
-3. **Start the Application**:
+3. **Build the Application**:
+```bash
+    npm run build
+```
+4. **Start the Application**:
 ```bash
     npm start
 ```
+
+## Hosted Access
+Access AnyPost remotely through:
+https://testassessment.vercel.app/
